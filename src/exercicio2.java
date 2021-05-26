@@ -1,7 +1,7 @@
-import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.*;
 
 /*---------Leitura de Arquivos---------*/
 
@@ -509,9 +509,13 @@ class Musica {
 }
 
 public class exercicio2 {
+
     public static void lerMusicas(Musica[] listaMusicas) {
 
-        ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura("/tmp/dataAEDs.csv");
+        ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
+
+        arquivoMusicas.abrirArquivo("dataAEDs.csv");
+
         int i = 0;
         String dadosMusica;
 
@@ -546,7 +550,9 @@ public class exercicio2 {
     public static int contarTotalMusicas() {
 
         int numMusicas = 0;
-        ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura("/tmp/dataAEDs.csv");
+        ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
+
+        arquivoMusicas.abrirArquivo("dataAEDs.csv");
 
         while (arquivoMusicas.ler() != null)
             numMusicas++;
