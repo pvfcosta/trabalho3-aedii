@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -156,22 +157,26 @@ class Fila{
     public double obterMediaDuration(){
         double media = 0;
         int qtd = 0;
-        for (int i = primeiro; i <= ultimo; i ++){
-            if(circuloMusica[i].getDuration_ms() != 0){
+        for (int i = 0; i <= 5 && this.circuloMusica[i] != null; i ++){
+            if(circuloMusica[i].getDuration_ms() != 0 && i != ultimo){
                 qtd++;
-                if(this.circuloMusica[i+1]==null)
-                    break;
+                if (i < 5) {
+                    if (this.circuloMusica[i + 1] == null)
+                        i++;
+                }
             }
         }
 
-        for (int i = primeiro; i <= ultimo; i ++){
-            if(circuloMusica[i].getDuration_ms() != 0){
+        for (int i = 0; i <= 5 && this.circuloMusica[i] != null; i ++){
+            if(circuloMusica[i].getDuration_ms() != 0 && i != ultimo){
                 media += circuloMusica[i].getDuration_ms();
-                if(this.circuloMusica[i+1]==null)
-                    break;
+                if (i < 5) {
+                    if (this.circuloMusica[i + 1] == null)
+                        i++;
+                }
             }
         }
-        media = Math.ceil(media/qtd);
+        media = Math.round(media/qtd);
 
         return media;
 
@@ -591,7 +596,7 @@ public class exercicio2 {
 
         ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
 
-        arquivoMusicas.abrirArquivo("dataAEDs.csv");
+        arquivoMusicas.abrirArquivo("/tmp/dataAEDs.csv");
 
         int i = 0;
         String dadosMusica;
@@ -625,9 +630,10 @@ public class exercicio2 {
         while (!id.equals("FIM")) {
             pesquisado = pesquisa.buscarId(listaMusicas, id);
             musicaNova.enfileirar(pesquisado);
-            id = MyIO.readLine();
             media = musicaNova.obterMediaDuration();
-            System.out.println(media);
+            DecimalFormat df = new DecimalFormat("######");
+            MyIO.println(df.format(media));
+            id = MyIO.readLine();
         }
 
         numOperacoes = MyIO.readInt();
@@ -636,17 +642,19 @@ public class exercicio2 {
         for (int i = 0; i < numOperacoes; i++){
             String[] pesquisaOperacao;
             pesquisaOperacao = id.split(" ",2);
-            if (pesquisaOperacao[0] == "I"){
+            if (pesquisaOperacao[0].equals("I")){
                 pesquisado = pesquisa.buscarId(listaMusicas, pesquisaOperacao[1]);
                 musicaNova.enfileirar(pesquisado);
                 media = musicaNova.obterMediaDuration();
-                System.out.println(media);
+                DecimalFormat df = new DecimalFormat("######");
+                MyIO.println(df.format(media));
             }
 
-            if (pesquisaOperacao[0] == "R"){
+            if (pesquisaOperacao[0].equals("R")){
                 pesquisado = musicaNova.desenfileirar();
                 MyIO.println("(R) " + pesquisado.getName());
             }
+            id = MyIO.readLine();
 
         }
     }
@@ -656,7 +664,7 @@ public class exercicio2 {
         int numMusicas = 0;
         ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
 
-        arquivoMusicas.abrirArquivo("dataAEDs.csv");
+        arquivoMusicas.abrirArquivo("/tmp/dataAEDs.csv");
 
         while (arquivoMusicas.ler() != null)
             numMusicas++;
