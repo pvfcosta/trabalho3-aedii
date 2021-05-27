@@ -95,7 +95,7 @@ class PesquisaSequencial {
     public Musica buscarId(Musica[] listaMusicas, String id) {
 
         for (int i = 0; i < listaMusicas.length; i++)
-            if (listaMusicas[i].getId().equals(id))
+            if (listaMusicas[i].getId().equals(id) && listaMusicas[i] != null )
                 return listaMusicas[i];
 
         return null;
@@ -103,6 +103,73 @@ class PesquisaSequencial {
 }
 
 /*---------Pesquisa Musica---------*/
+
+// Classe Fila
+
+class Fila{
+
+    Musica entrada;
+    Musica[] circuloMusica;
+    int primeiro, ultimo;
+
+    public Fila(){
+        this(5);
+    }
+    public Fila(int tamanho){
+        circuloMusica = new Musica[tamanho+1];
+        primeiro=ultimo=0;
+    }
+
+    public void enfileirar(Musica musica){
+        Musica temp;
+        if (((ultimo + 1) % circuloMusica.length) == primeiro){
+            temp = desenfileirar();
+        }
+        circuloMusica[ultimo] = musica;
+        ultimo = (ultimo+1) % circuloMusica.length;
+
+    }
+    public Musica desenfileirar(){
+        Musica temp;
+        temp = circuloMusica[primeiro];
+        return temp;
+
+    }
+
+    public void mostrar(){
+        for (int i = primeiro; i <= ultimo; i ++){
+            if(circuloMusica[i].getDuration_ms() != 0){
+                MyIO.println("(" + i + ") ");
+                circuloMusica[i].imprimir();
+            }
+        }
+
+        MyIO.println();
+    }
+
+    public double obterMediaDuration(){
+        double media = 0;
+        int qtd = 0;
+        for (int i = primeiro; i <= ultimo; i ++){
+            if(circuloMusica[i].getDuration_ms() != 0){
+                qtd++;
+            }
+        }
+
+        for (int i = primeiro; i <= ultimo; i ++){
+            if(circuloMusica[i].getDuration_ms() != 0){
+                media += circuloMusica[i].getDuration_ms();
+            }
+        }
+        media = media/qtd;
+
+        return media;
+
+
+    }
+
+
+}
 
 class Musica {
 
@@ -520,6 +587,7 @@ public class exercicio2 {
         String dadosMusica;
 
         dadosMusica = arquivoMusicas.ler();
+
         while ((dadosMusica = arquivoMusicas.ler()) != null) {
 
             listaMusicas[i] = new Musica(dadosMusica);
@@ -531,19 +599,45 @@ public class exercicio2 {
 
     public static void main(String[] args) {
 
+        Fila musicaNova = new Fila(5);
+        int numOperacoes;
         int numTotalMusicas = contarTotalMusicas();
         Musica[] listaMusicas = new Musica[numTotalMusicas];
         Musica pesquisado;
         PesquisaSequencial pesquisa = new PesquisaSequencial();
         String id;
+        double media;
+
 
         lerMusicas(listaMusicas);
 
         id = MyIO.readLine();
         while (!id.equals("FIM")) {
             pesquisado = pesquisa.buscarId(listaMusicas, id);
-            pesquisado.imprimir();
+            musicaNova.enfileirar(pesquisado);
             id = MyIO.readLine();
+            media = musicaNova.obterMediaDuration();
+            System.out.println(media);
+        }
+
+        numOperacoes = MyIO.readInt();
+        id = MyIO.readLine();
+
+        for (int i = 0; i < numOperacoes; i++){
+            String[] pesquisaOperacao;
+            pesquisaOperacao = id.split(" ",2);
+            if (pesquisaOperacao[0] == "I"){
+                pesquisado = pesquisa.buscarId(listaMusicas, pesquisaOperacao[1]);
+                musicaNova.enfileirar(pesquisado);
+                media = musicaNova.obterMediaDuration();
+                System.out.println(media);
+            }
+
+            if (pesquisaOperacao[0] == "R"){
+                pesquisado = musicaNova.desenfileirar();
+                MyIO.println("(R) " + pesquisado.getName());
+            }
+
         }
     }
 
