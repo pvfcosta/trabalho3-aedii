@@ -131,7 +131,10 @@ class Fila{
     }
     public Musica desenfileirar(){
         Musica temp;
+
         temp = circuloMusica[primeiro];
+        primeiro = (primeiro + 1) % circuloMusica.length;
+
         return temp;
 
     }
@@ -139,8 +142,11 @@ class Fila{
     public void mostrar(){
         for (int i = primeiro; i <= ultimo; i ++){
             if(circuloMusica[i].getDuration_ms() != 0){
-                MyIO.println("(" + i + ") ");
+                MyIO.print("(" + i + ") ");
                 circuloMusica[i].imprimir();
+            }
+            else{
+                MyIO.print("(" + i + ") Posição Vazia");
             }
         }
 
@@ -153,15 +159,19 @@ class Fila{
         for (int i = primeiro; i <= ultimo; i ++){
             if(circuloMusica[i].getDuration_ms() != 0){
                 qtd++;
+                if(this.circuloMusica[i+1]==null)
+                    break;
             }
         }
 
         for (int i = primeiro; i <= ultimo; i ++){
             if(circuloMusica[i].getDuration_ms() != 0){
                 media += circuloMusica[i].getDuration_ms();
+                if(this.circuloMusica[i+1]==null)
+                    break;
             }
         }
-        media = media/qtd;
+        media = Math.ceil(media/qtd);
 
         return media;
 
