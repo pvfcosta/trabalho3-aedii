@@ -109,7 +109,6 @@ class PesquisaSequencial {
 
 class Fila{
 
-    Musica entrada;
     Musica[] circuloMusica;
     int primeiro, ultimo;
 
@@ -639,7 +638,7 @@ public class exercicio2 {
         numOperacoes = MyIO.readInt();
         id = MyIO.readLine();
 
-        for (int i = 0; i < numOperacoes; i++){
+        for (int i = 0; i < numOperacoes && !id.equals("FIM"); i++){
             String[] pesquisaOperacao;
             pesquisaOperacao = id.split(" ",2);
             if (pesquisaOperacao[0].equals("I")){
@@ -657,6 +656,7 @@ public class exercicio2 {
             id = MyIO.readLine();
 
         }
+
     }
 
     public static int contarTotalMusicas() {
