@@ -473,6 +473,7 @@ int main() {
 
     return 0;
 }
+
 int obtemMediaDuration(Fila* minhaFila){
     ApontadorCelula end = minhaFila->frente;
     int media = 0;
