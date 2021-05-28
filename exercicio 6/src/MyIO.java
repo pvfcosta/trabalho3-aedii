@@ -1,7 +1,5 @@
-package exercicio6;
-
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.*;
 
 class MyIO {
 

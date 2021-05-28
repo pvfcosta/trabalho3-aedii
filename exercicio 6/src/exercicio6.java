@@ -1,7 +1,4 @@
-package exercicio6;
-
 import java.io.*;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,45 +49,6 @@ class ArquivoTextoLeitura {
 
 /*---------Leitura de Arquivos---------*/
 
-/*---------Escrita de Arquivos---------*/
-
-class ArquivoTextoEscrita {
-
-    private BufferedWriter saida;
-
-    public void abrirArquivo(String nomeArquivo) {
-
-        try {
-            saida = new BufferedWriter(new FileWriter(nomeArquivo));
-        } catch (FileNotFoundException excecao) {
-            System.out.println("Arquivo não encontrado");
-        } catch (IOException excecao) {
-            System.out.println("Erro na abertura do arquivo de escrita: " + excecao);
-        }
-    }
-
-    public void fecharArquivo() {
-
-        try {
-            saida.close();
-        } catch (IOException excecao) {
-            System.out.println("Erro no fechamento do arquivo de escrita: " + excecao);
-        }
-    }
-
-    public void escrever(String textoEntrada) {
-
-        try {
-            saida.write(textoEntrada);
-            saida.newLine();
-        } catch (IOException excecao) {
-            System.out.println("Erro de entrada/saída " + excecao);
-        }
-    }
-}
-
-/*---------Escrita de Arquivos---------*/
-
 /*---------Pesquisa exercicio6.Musica---------*/
 
 class PesquisaSequencial {
@@ -126,6 +84,10 @@ class Celula{
         item = null;
         prox = null;
     }
+}
+
+class Fila{
+
 }
 /*---------exercicio6.Celula---------*/
 
@@ -556,61 +518,61 @@ public class exercicio6 {
 
     public static void main(String[] args) {
 
-        Fila musicaNova = new Fila(5);
-        int numOperacoes;
-        int numTotalMusicas = contarTotalMusicas();
-        Musica[] listaMusicas = new Musica[numTotalMusicas];
-        Musica pesquisado;
-        PesquisaSequencial pesquisa = new PesquisaSequencial();
-        String id;
-        String operacao;
-        double media;
-
-        lerMusicas(listaMusicas);
-
-        id = MyIO.readLine();
-        while (!id.equals("FIM")) {
-            pesquisado = pesquisa.buscarId(listaMusicas, id);
-            musicaNova.enfileirar(pesquisado);
-            media = musicaNova.obterMediaDuration();
-            DecimalFormat df = new DecimalFormat("######");
-            MyIO.println(df.format(media));
-            id = MyIO.readLine();
-        }
-
-        numOperacoes = MyIO.readInt();
-
-        for (int i = 0; i < numOperacoes; i++){
-            operacao = MyIO.readLine();
-            String[] pesquisaOperacao;
-            pesquisaOperacao = operacao.split(" ",2);
-            if (pesquisaOperacao[0].equals("I")){
-                pesquisado = pesquisa.buscarId(listaMusicas, pesquisaOperacao[1]);
-                musicaNova.enfileirar(pesquisado);
-                media = musicaNova.obterMediaDuration();
-                DecimalFormat df = new DecimalFormat("######");
-                MyIO.println(df.format(media));
-            }
-            else if (pesquisaOperacao[0].equals("R")){
-                pesquisado = musicaNova.desenfileirar();
-                MyIO.println("(R) " + pesquisado.getName());
-            }
-        }
-
+//        Fila musicaNova = new Fila(5);
+//        int numOperacoes;
+//        int numTotalMusicas = contarTotalMusicas();
+//        Musica[] listaMusicas = new Musica[numTotalMusicas];
+//        Musica pesquisado;
+//        PesquisaSequencial pesquisa = new PesquisaSequencial();
+//        String id;
+//        String operacao;
+//        double media;
+//
+//        lerMusicas(listaMusicas);
+//
+//        id = MyIO.readLine();
+//        while (!id.equals("FIM")) {
+//            pesquisado = pesquisa.buscarId(listaMusicas, id);
+//            musicaNova.enfileirar(pesquisado);
+//            media = musicaNova.obterMediaDuration();
+//            DecimalFormat df = new DecimalFormat("######");
+//            MyIO.println(df.format(media));
+//            id = MyIO.readLine();
+//        }
+//
+//        numOperacoes = MyIO.readInt();
+//
+//        for (int i = 0; i < numOperacoes; i++){
+//            operacao = MyIO.readLine();
+//            String[] pesquisaOperacao;
+//            pesquisaOperacao = operacao.split(" ",2);
+//            if (pesquisaOperacao[0].equals("I")){
+//                pesquisado = pesquisa.buscarId(listaMusicas, pesquisaOperacao[1]);
+//                musicaNova.enfileirar(pesquisado);
+//                media = musicaNova.obterMediaDuration();
+//                DecimalFormat df = new DecimalFormat("######");
+//                MyIO.println(df.format(media));
+//            }
+//            else if (pesquisaOperacao[0].equals("R")){
+//                pesquisado = musicaNova.desenfileirar();
+//                MyIO.println("(R) " + pesquisado.getName());
+//            }
+//        }
+//
     }
 
-    public static int contarTotalMusicas() {
+        public static int contarTotalMusicas() {
 
-        int numMusicas = 0;
-        ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
+            int numMusicas = 0;
+            ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
 
-        arquivoMusicas.abrirArquivo("/tmp/dataAEDs.csv");
+            arquivoMusicas.abrirArquivo("/tmp/dataAEDs.csv");
 
-        while (arquivoMusicas.ler() != null)
-            numMusicas++;
+            while (arquivoMusicas.ler() != null)
+                numMusicas++;
 
-        arquivoMusicas.fecharArquivo();
+            arquivoMusicas.fecharArquivo();
 
-        return numMusicas;
+            return numMusicas;
+        }
     }
-}

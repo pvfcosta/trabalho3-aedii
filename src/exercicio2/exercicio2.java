@@ -56,7 +56,7 @@ class ArquivoTextoLeitura {
 
 class PesquisaSequencial {
 
-    public exercicio6.Musica buscarId(exercicio6.Musica[] listaMusicas, String id) {
+    public Musica buscarId(Musica[] listaMusicas, String id) {
 
         for (int i = 0; i < listaMusicas.length; i++)
             if (listaMusicas[i].getId().equals(id) && listaMusicas[i] != null )
@@ -72,19 +72,19 @@ class PesquisaSequencial {
 
 class Fila{
 
-    exercicio6.Musica[] circuloMusica;
+    Musica[] circuloMusica;
     int primeiro, ultimo;
 
     public Fila(){
         this(5);
     }
     public Fila(int tamanho){
-        circuloMusica = new exercicio6.Musica[tamanho+1];
+        circuloMusica = new Musica[tamanho+1];
         primeiro=ultimo=0;
     }
 
-    public void enfileirar(exercicio6.Musica musica){
-        exercicio6.Musica temp;
+    public void enfileirar(Musica musica){
+        Musica temp;
         if (((ultimo + 1) % circuloMusica.length) == primeiro){
             temp = desenfileirar();
         }
@@ -92,8 +92,8 @@ class Fila{
         ultimo = (ultimo+1) % circuloMusica.length;
 
     }
-    public exercicio6.Musica desenfileirar(){
-        exercicio6.Musica temp;
+    public Musica desenfileirar(){
+        Musica temp;
 
         temp = circuloMusica[primeiro];
         circuloMusica[primeiro].setDuration_ms(0);
@@ -457,9 +457,9 @@ class Musica {
         this.year = year;
     }
 
-    public exercicio6.Musica clone() {
+    public Musica clone() {
 
-        exercicio6.Musica copia;
+        Musica copia;
         Date release_date;
         String[] artists = new String[this.artists.length];
 
@@ -469,7 +469,7 @@ class Musica {
 
         release_date = (Date)this.release_date.clone();
 
-        copia = new exercicio6.Musica(this.id, this.name, this.key, artists, release_date, this.acousticness, this.danceability, this.energy, this.duration_ms, this.instrumentalness, this.valence, this.popularity, this.time, this.liveness, this.loudness, this.speechiness, this.year);
+        copia = new Musica(this.id, this.name, this.key, artists, release_date, this.acousticness, this.danceability, this.energy, this.duration_ms, this.instrumentalness, this.valence, this.popularity, this.time, this.liveness, this.loudness, this.speechiness, this.year);
 
         return copia;
     }
@@ -555,9 +555,9 @@ class Musica {
 
 public class exercicio2 {
 
-    public static void lerMusicas(exercicio6.Musica[] listaMusicas) {
+    public static void lerMusicas(Musica[] listaMusicas) {
 
-        exercicio6.ArquivoTextoLeitura arquivoMusicas = new exercicio6.ArquivoTextoLeitura();
+        ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
 
         arquivoMusicas.abrirArquivo("/tmp/dataAEDs.csv");
 
@@ -568,7 +568,7 @@ public class exercicio2 {
 
         while ((dadosMusica = arquivoMusicas.ler()) != null) {
 
-            listaMusicas[i] = new exercicio6.Musica(dadosMusica);
+            listaMusicas[i] = new Musica(dadosMusica);
             i++;
         }
 
@@ -577,12 +577,12 @@ public class exercicio2 {
 
     public static void main(String[] args) {
 
-        Fila musicaNova = new Fila(5);
+        Fila musicaNova = new Fila();
         int numOperacoes;
         int numTotalMusicas = contarTotalMusicas();
-        exercicio6.Musica[] listaMusicas = new exercicio6.Musica[numTotalMusicas];
-        exercicio6.Musica pesquisado;
-        exercicio6.PesquisaSequencial pesquisa = new exercicio6.PesquisaSequencial();
+        Musica[] listaMusicas = new Musica[numTotalMusicas];
+        Musica pesquisado;
+        PesquisaSequencial pesquisa = new PesquisaSequencial();
         String id;
         String operacao;
         double media;
@@ -623,7 +623,7 @@ public class exercicio2 {
     public static int contarTotalMusicas() {
 
         int numMusicas = 0;
-        exercicio6.ArquivoTextoLeitura arquivoMusicas = new exercicio6.ArquivoTextoLeitura();
+        ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
 
         arquivoMusicas.abrirArquivo("/tmp/dataAEDs.csv");
 
