@@ -135,7 +135,10 @@ class Fila {
             media += temp.getDuration_ms();
         }
 
-        return media / qtde;
+        if (qtde == 0)
+            return 0;
+        else
+            return (media / qtde);
 
     }
 }
