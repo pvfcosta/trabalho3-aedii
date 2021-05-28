@@ -105,6 +105,28 @@ class PesquisaSequencial {
 
 /*---------Pesquisa Musica---------*/
 
+/*---------Celula---------*/
+
+class Celula{
+    public Musica item;
+    public Celula prox;
+    public Celula (Musica musica, Celula proxCelula){
+        item = musica;
+        prox = proxCelula;
+    }
+
+    public Celula(Musica musica){
+        item = musica;
+        prox = null;
+    }
+
+    public Celula(){
+        item = null;
+        prox = null;
+    }
+}
+/*---------Celula---------*/
+
 class Musica {
 
     private String id;
