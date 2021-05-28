@@ -1,8 +1,10 @@
-import java.io.*;
+package exercicio2;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.*;
 
 /*---------Leitura de Arquivos---------*/
 
@@ -50,50 +52,11 @@ class ArquivoTextoLeitura {
 
 /*---------Leitura de Arquivos---------*/
 
-/*---------Escrita de Arquivos---------*/
-
-class ArquivoTextoEscrita {
-
-    private BufferedWriter saida;
-
-    public void abrirArquivo(String nomeArquivo) {
-
-        try {
-            saida = new BufferedWriter(new FileWriter(nomeArquivo));
-        } catch (FileNotFoundException excecao) {
-            System.out.println("Arquivo não encontrado");
-        } catch (IOException excecao) {
-            System.out.println("Erro na abertura do arquivo de escrita: " + excecao);
-        }
-    }
-
-    public void fecharArquivo() {
-
-        try {
-            saida.close();
-        } catch (IOException excecao) {
-            System.out.println("Erro no fechamento do arquivo de escrita: " + excecao);
-        }
-    }
-
-    public void escrever(String textoEntrada) {
-
-        try {
-            saida.write(textoEntrada);
-            saida.newLine();
-        } catch (IOException excecao) {
-            System.out.println("Erro de entrada/saída " + excecao);
-        }
-    }
-}
-
-/*---------Escrita de Arquivos---------*/
-
-/*---------Pesquisa Musica---------*/
+/*---------Pesquisa exercicio6.exercicio2.Musica---------*/
 
 class PesquisaSequencial {
 
-    public Musica buscarId(Musica[] listaMusicas, String id) {
+    public exercicio6.Musica buscarId(exercicio6.Musica[] listaMusicas, String id) {
 
         for (int i = 0; i < listaMusicas.length; i++)
             if (listaMusicas[i].getId().equals(id) && listaMusicas[i] != null )
@@ -103,29 +66,88 @@ class PesquisaSequencial {
     }
 }
 
-/*---------Pesquisa Musica---------*/
+/*---------Pesquisa exercicio6.exercicio2.Musica---------*/
 
-/*---------Celula---------*/
+// Classe exercicio2.Fila
 
-class Celula{
-    public Musica item;
-    public Celula prox;
-    public Celula (Musica musica, Celula proxCelula){
-        item = musica;
-        prox = proxCelula;
+class Fila{
+
+    exercicio6.Musica[] circuloMusica;
+    int primeiro, ultimo;
+
+    public Fila(){
+        this(5);
+    }
+    public Fila(int tamanho){
+        circuloMusica = new exercicio6.Musica[tamanho+1];
+        primeiro=ultimo=0;
     }
 
-    public Celula(Musica musica){
-        item = musica;
-        prox = null;
+    public void enfileirar(exercicio6.Musica musica){
+        exercicio6.Musica temp;
+        if (((ultimo + 1) % circuloMusica.length) == primeiro){
+            temp = desenfileirar();
+        }
+        circuloMusica[ultimo] = musica;
+        ultimo = (ultimo+1) % circuloMusica.length;
+
+    }
+    public exercicio6.Musica desenfileirar(){
+        exercicio6.Musica temp;
+
+        temp = circuloMusica[primeiro];
+        circuloMusica[primeiro].setDuration_ms(0);
+        primeiro = (primeiro + 1) % circuloMusica.length;
+
+        return temp;
+
     }
 
-    public Celula(){
-        item = null;
-        prox = null;
+    public void mostrar(){
+        for (int i = primeiro; i <= ultimo; i ++){
+            if(circuloMusica[i].getDuration_ms() != 0){
+                MyIO.print("(" + i + ") ");
+                circuloMusica[i].imprimir();
+            }
+            else{
+                MyIO.print("(" + i + ") Posição Vazia");
+            }
+        }
+
+        MyIO.println();
     }
+
+    public double obterMediaDuration(){
+        double media = 0;
+        int qtd = 0;
+        for (int i = 0; i <= 5 && this.circuloMusica[i] != null; i ++){
+            if(circuloMusica[i].getDuration_ms() != 0 && i != ultimo){
+                qtd++;
+                if (i < 5) {
+                    if (this.circuloMusica[i + 1] == null)
+                        i++;
+                }
+            }
+        }
+
+        for (int i = 0; i <= 5 && this.circuloMusica[i] != null; i ++){
+            if(circuloMusica[i].getDuration_ms() != 0 && i != ultimo){
+                media += circuloMusica[i].getDuration_ms();
+                if (i < 5) {
+                    if (this.circuloMusica[i + 1] == null)
+                        i++;
+                }
+            }
+        }
+        media = Math.round(media/qtd);
+
+        return media;
+
+
+    }
+
+
 }
-/*---------Celula---------*/
 
 class Musica {
 
@@ -435,9 +457,9 @@ class Musica {
         this.year = year;
     }
 
-    public Musica clone() {
+    public exercicio6.Musica clone() {
 
-        Musica copia;
+        exercicio6.Musica copia;
         Date release_date;
         String[] artists = new String[this.artists.length];
 
@@ -447,7 +469,7 @@ class Musica {
 
         release_date = (Date)this.release_date.clone();
 
-        copia = new Musica(this.id, this.name, this.key, artists, release_date, this.acousticness, this.danceability, this.energy, this.duration_ms, this.instrumentalness, this.valence, this.popularity, this.time, this.liveness, this.loudness, this.speechiness, this.year);
+        copia = new exercicio6.Musica(this.id, this.name, this.key, artists, release_date, this.acousticness, this.danceability, this.energy, this.duration_ms, this.instrumentalness, this.valence, this.popularity, this.time, this.liveness, this.loudness, this.speechiness, this.year);
 
         return copia;
     }
@@ -531,10 +553,11 @@ class Musica {
     }
 }
 
-public class exercicio6 {
-    public static void lerMusicas(Musica[] listaMusicas) {
+public class exercicio2 {
 
-        ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
+    public static void lerMusicas(exercicio6.Musica[] listaMusicas) {
+
+        exercicio6.ArquivoTextoLeitura arquivoMusicas = new exercicio6.ArquivoTextoLeitura();
 
         arquivoMusicas.abrirArquivo("/tmp/dataAEDs.csv");
 
@@ -545,7 +568,7 @@ public class exercicio6 {
 
         while ((dadosMusica = arquivoMusicas.ler()) != null) {
 
-            listaMusicas[i] = new Musica(dadosMusica);
+            listaMusicas[i] = new exercicio6.Musica(dadosMusica);
             i++;
         }
 
@@ -557,9 +580,9 @@ public class exercicio6 {
         Fila musicaNova = new Fila(5);
         int numOperacoes;
         int numTotalMusicas = contarTotalMusicas();
-        Musica[] listaMusicas = new Musica[numTotalMusicas];
-        Musica pesquisado;
-        PesquisaSequencial pesquisa = new PesquisaSequencial();
+        exercicio6.Musica[] listaMusicas = new exercicio6.Musica[numTotalMusicas];
+        exercicio6.Musica pesquisado;
+        exercicio6.PesquisaSequencial pesquisa = new exercicio6.PesquisaSequencial();
         String id;
         String operacao;
         double media;
@@ -600,7 +623,7 @@ public class exercicio6 {
     public static int contarTotalMusicas() {
 
         int numMusicas = 0;
-        ArquivoTextoLeitura arquivoMusicas = new ArquivoTextoLeitura();
+        exercicio6.ArquivoTextoLeitura arquivoMusicas = new exercicio6.ArquivoTextoLeitura();
 
         arquivoMusicas.abrirArquivo("/tmp/dataAEDs.csv");
 
