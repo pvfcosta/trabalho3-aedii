@@ -1,4 +1,5 @@
 import java.io.*;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -63,9 +64,9 @@ class PesquisaSequencial {
     }
 }
 
-/*---------Pesquisa exercicio6.Musica---------*/
+/*---------Pesquisa Musica---------*/
 
-/*---------exercicio6.Celula---------*/
+/*---------Celula---------*/
 
 class Celula{
     public Musica item;
@@ -86,10 +87,59 @@ class Celula{
     }
 }
 
-class Fila{
+class Fila {
+    private Celula frente;
+    private Celula tras;
+    private int qtde;
 
+    public Fila() {
+        frente = new Celula();
+        tras = frente;
+    }
+
+    public boolean vazia() {
+        return frente == tras;
+    }
+
+    public void enfileira(Musica musica) {
+        if (qtde == 5){
+            Musica temp = desenfileira();
+        }
+        tras.prox = new Celula(musica);
+        tras = tras.prox;
+        qtde++;
+    }
+
+    public Musica desenfileira() {
+        if (frente != tras) {
+            frente = frente.prox;
+            qtde--;
+            return frente.item;
+        }
+        return null;
+    }
+
+    public void mostra() {
+        MyIO.print("[ ");
+        for (Celula c = frente.prox; c != null; c = c.prox)
+            MyIO.print(c.item + " ");
+        MyIO.println("] ");
+    }
+
+    public double obterMediaDuration() {
+        Musica temp;
+        double media = 0;
+
+        for (Celula c = frente.prox; c != null; c = c.prox) {
+            temp = c.item;
+            media += temp.getDuration_ms();
+        }
+
+        return media / qtde;
+
+    }
 }
-/*---------exercicio6.Celula---------*/
+/*---------Celula---------*/
 
 class Musica {
 
@@ -518,47 +568,51 @@ public class exercicio6 {
 
     public static void main(String[] args) {
 
-//        Fila musicaNova = new Fila(5);
-//        int numOperacoes;
-//        int numTotalMusicas = contarTotalMusicas();
-//        Musica[] listaMusicas = new Musica[numTotalMusicas];
-//        Musica pesquisado;
-//        PesquisaSequencial pesquisa = new PesquisaSequencial();
-//        String id;
-//        String operacao;
-//        double media;
-//
-//        lerMusicas(listaMusicas);
-//
-//        id = MyIO.readLine();
-//        while (!id.equals("FIM")) {
-//            pesquisado = pesquisa.buscarId(listaMusicas, id);
-//            musicaNova.enfileirar(pesquisado);
-//            media = musicaNova.obterMediaDuration();
-//            DecimalFormat df = new DecimalFormat("######");
-//            MyIO.println(df.format(media));
-//            id = MyIO.readLine();
-//        }
-//
-//        numOperacoes = MyIO.readInt();
-//
-//        for (int i = 0; i < numOperacoes; i++){
-//            operacao = MyIO.readLine();
-//            String[] pesquisaOperacao;
-//            pesquisaOperacao = operacao.split(" ",2);
-//            if (pesquisaOperacao[0].equals("I")){
-//                pesquisado = pesquisa.buscarId(listaMusicas, pesquisaOperacao[1]);
-//                musicaNova.enfileirar(pesquisado);
-//                media = musicaNova.obterMediaDuration();
-//                DecimalFormat df = new DecimalFormat("######");
-//                MyIO.println(df.format(media));
-//            }
-//            else if (pesquisaOperacao[0].equals("R")){
-//                pesquisado = musicaNova.desenfileirar();
-//                MyIO.println("(R) " + pesquisado.getName());
-//            }
-//        }
-//
+        Fila filaMusicas = new Fila();
+
+        int numOperacoes;
+        Musica pesquisado;
+        String id;
+        String operacao;
+        double media;
+
+        int numTotalMusicas = contarTotalMusicas();
+
+        Musica[] listaMusicas = new Musica[numTotalMusicas];
+        PesquisaSequencial pesquisa = new PesquisaSequencial();
+
+        lerMusicas(listaMusicas);
+
+        id = MyIO.readLine();
+
+        while (!id.equals("FIM")) {
+            pesquisado = pesquisa.buscarId(listaMusicas, id);
+            filaMusicas.enfileira(pesquisado);
+            media = filaMusicas.obterMediaDuration();
+            DecimalFormat df = new DecimalFormat("######");
+            MyIO.println(df.format(media));
+            id = MyIO.readLine();
+        }
+
+        numOperacoes = MyIO.readInt();
+
+        for (int i = 0; i < numOperacoes; i++){
+            operacao = MyIO.readLine();
+            String[] pesquisaOperacao;
+            pesquisaOperacao = operacao.split(" ",2);
+
+            if (pesquisaOperacao[0].equals("I")){
+                pesquisado = pesquisa.buscarId(listaMusicas, pesquisaOperacao[1]);
+                filaMusicas.enfileira(pesquisado);
+                media = filaMusicas.obterMediaDuration();
+                DecimalFormat df = new DecimalFormat("######");
+                MyIO.println(df.format(media));
+            }
+            else if (pesquisaOperacao[0].equals("R")){
+                pesquisado = filaMusicas.desenfileira();
+                MyIO.println("(R) " + pesquisado.getName());
+            }
+        }
     }
 
         public static int contarTotalMusicas() {

@@ -52,7 +52,7 @@ class ArquivoTextoLeitura {
 
 /*---------Leitura de Arquivos---------*/
 
-/*---------Pesquisa exercicio6.exercicio2.Musica---------*/
+/*---------Pesquisa Musica---------*/
 
 class PesquisaSequencial {
 
@@ -60,15 +60,15 @@ class PesquisaSequencial {
 
         for (int i = 0; i < listaMusicas.length; i++)
             if (listaMusicas[i].getId().equals(id) && listaMusicas[i] != null )
-                return listaMusicas[i];
+                 return listaMusicas[i];
 
         return null;
     }
 }
 
-/*---------Pesquisa exercicio6.exercicio2.Musica---------*/
+/*---------Pesquisa Musica---------*/
 
-// Classe exercicio2.Fila
+// Classe Fila
 
 class Fila{
 
